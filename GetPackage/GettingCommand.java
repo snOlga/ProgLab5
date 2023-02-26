@@ -1,6 +1,5 @@
 package GetPackage;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -15,11 +14,17 @@ public class GettingCommand
      */
     public String getFromConsole() throws IOException
     {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        String line;
-        line = reader.readLine();
+//        try
+//        {
+            String line;
+            line = GetStringFromConsole.getNotNullString();
 
-        return line;
+            return line;
+//        } catch (NullPointerException exception)
+//        {
+//            System.out.println("Not");
+//        }
     }
 }

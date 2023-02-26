@@ -1,5 +1,6 @@
 package GetPackage;
 
+import CommandsPackage.Exit;
 import OrganizationsPackage.*;
 
 import java.io.*;
@@ -9,9 +10,11 @@ import java.util.*;
 /**
  * class GettingCommand - getting organization from any ways
  */
-public class GettingOrganizations
+public class GettingOrganizations implements GetStringFromConsole
 {
     public static TreeMap<Integer, Organization> organizationMap = new TreeMap<Integer, Organization>();
+
+    public static String bufferedFileName = "organization3.csv";
 
     /**
      * Getting organization from csv file
@@ -28,6 +31,7 @@ public class GettingOrganizations
     public void getFromFile (String fileName) throws IOException
     {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+
 
         String firstLine = bufferedReader.readLine();
 
@@ -94,7 +98,17 @@ public class GettingOrganizations
             float yForAddress = 0;
             String townForLocation = null;
 
-            String[] dataFromLine = line.split(";");
+            //String[] dataFromLine = line.split(";");
+            ArrayList<String> dataFromLineList = new ArrayList<>();
+            dataFromLineList.add(line.split(";")[0]);
+            dataFromLineList.add(line.split("\"")[1]);
+            dataFromLineList.addAll(List.of(line.split("\"")[2].split(";")));
+            dataFromLineList.remove(2);
+            String [] dataFromLine = new String[dataFromLineList.size()];
+            for (int i = 0; i < dataFromLine.length; i++)
+            {
+                dataFromLine[i] = dataFromLineList.get(i);
+            }
 
             for (int i = 0; i < dataFromLine.length; i++)
             {
@@ -108,7 +122,8 @@ public class GettingOrganizations
                         id = Integer.parseInt(dataFromLine[i]);
                     } else if (i == nameColumn)
                     {
-                        name = dataFromLine[i];
+                        name = line.split("\"")[1];
+
                     } else if (i == coordinatesColumn)
                     {
                         String[] coordinatesLine = dataFromLine[i].split(",");
@@ -162,6 +177,23 @@ public class GettingOrganizations
                             xForAddress = Integer.parseInt(dataForLocation[firstNumber]);
                             yForAddress = Float.parseFloat(dataForLocation[secondNumber]);
                         }
+
+                        if(addressLine.length > thirdNumber)
+                        {
+                            String[] addresLineTown = dataForLocation;
+                            addresLineTown[firstNumber] = "";
+                            addresLineTown[secondNumber] = "";
+                            townForLocation = dataForLocation.toString();
+                            char falseChar = ']';
+                            char falseChar2 = ',';
+                            for (char letter : townForLocation.toCharArray())
+                            {
+                                if (letter == falseChar || letter == falseChar2)
+                                {
+                                    townForLocation.replace(String.valueOf(letter), "");
+                                }
+                            }
+                        }
                         Location location = new Location(xForAddress, yForAddress, townForLocation);
                         postalAddress = new Address(addressLine[indexOfPostalAddress], location);
                     }
@@ -181,22 +213,31 @@ public class GettingOrganizations
 
     public String getOrganizationFileName() throws IOException
     {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
         System.out.println("Write file name:");
 
-        String fileName = reader.readLine();
+        String fileName = GetStringFromConsole.getNotNullString();
 
-        try
-        {
-            FileReader fileReader = new FileReader(fileName);
-            return fileName;
-        }
-        catch (FileNotFoundException exception)
-        {
-            System.out.println("File was not found. Try again");
-            return this.getOrganizationFileName();
-        }
+            try
+            {
+                FileReader fileReader = new FileReader(fileName);
+//            if (fileName == null)
+//            {
+//                return this.getOrganizationFileName();
+//            } else
+//            {
+                return fileName;
+//            }
+            } catch (FileNotFoundException exception)
+            {
+                System.out.println("File was not found. Try again");
+                return this.getOrganizationFileName();
+            }
+//        catch (NullPointerException exception1)
+//        {
+//            System.out.println("File was not found. Try again");
+//            return this.getOrganizationFileName();
+//        }
+
     }
 
     /**
@@ -220,30 +261,30 @@ public class GettingOrganizations
         String zipCode = null;
         String townForLocation= null;
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try
         {
             System.out.println("Please, write an organization: \n name:");
-            name = reader.readLine();
+            name = GetStringFromConsole.getNotNullString();
             try
             {
                 System.out.println("\n Coordinates: \n x(in long format):");
-                xForCoordinates = Long.parseLong(reader.readLine());
+                xForCoordinates = Long.parseLong(GetStringFromConsole.getNotNullString());
                 System.out.println("\n y(in double format):");
-                yForCoordinates = Double.parseDouble(reader.readLine());
+                yForCoordinates = Double.parseDouble(GetStringFromConsole.getNotNullString());
                 coordinates = new Coordinates(xForCoordinates, yForCoordinates);
 //                System.out.println("\n creation date(in format yyyy-mm-ddT00:00:00+00:00[Time/Zone]):");
 //                creationDate = ZonedDateTime.parse(reader.readLine());
                 System.out.println("\n annual turnover(in long format):");
-                annualTurnover = Long.parseLong(reader.readLine());
+                annualTurnover = Long.parseLong(GetStringFromConsole.getNotNullString());
                 System.out.println("\n employees count(in long format):");
-                employeesCount = Long.parseLong(reader.readLine());
+                employeesCount = Long.parseLong(GetStringFromConsole.getNotNullString());
                 System.out.println("\n does organization have type? (type 'y' for yes, 'n' for no)?");
-                String setTypes = reader.readLine();
+                String setTypes = GetStringFromConsole.getNotNullString();
                 if (setTypes.toLowerCase().contains("y"))
                 {
                     System.out.println("\n organization type. Show all types (type 'y' for yes, 'n' for no)?");
-                    String showAllTypes = reader.readLine();
+                    String showAllTypes = GetStringFromConsole.getNotNullString();
                     if (showAllTypes.toLowerCase().contains("y"))
                     {
                         for(OrganizationType organizationType : OrganizationType.values())
@@ -252,7 +293,7 @@ public class GettingOrganizations
                         }
                     }
                     System.out.println("\n organization type:");
-                    String getType = reader.readLine();
+                    String getType = GetStringFromConsole.getNotNullString();
                     for (OrganizationType orgType : OrganizationType.values())
                     {
                         if (orgType.toString().equals(getType.toUpperCase()))
@@ -262,20 +303,21 @@ public class GettingOrganizations
                     }
                 }
                 System.out.println("\n does organization have postal address? (type 'y' for yes, 'n' for no)?");
-                String setPostalAddress = reader.readLine();
+                String setPostalAddress = GetStringFromConsole.getNotNullString();
                 if (setPostalAddress.toLowerCase().contains("y"))
                 {
                     System.out.println("\n postal address. Zipcode:");
-                    zipCode = reader.readLine();
+                    zipCode = GetStringFromConsole.getNotNullString();
                     System.out.println("\n town:");
-                    townForLocation = reader.readLine();
+                    townForLocation = GetStringFromConsole.getNotNullString();
                     System.out.println("\n x of town (in int format):");
-                    xForAddress = Integer.parseInt(reader.readLine());
+                    xForAddress = Integer.parseInt(GetStringFromConsole.getNotNullString());
                     System.out.println("\n y of town (in float format):");
-                    yForAddress = Float.parseFloat(reader.readLine());
+                    yForAddress = Float.parseFloat(GetStringFromConsole.getNotNullString());
                     Location location = new Location(xForAddress, yForAddress, townForLocation);
                     postalAddress = new Address(zipCode,location);
                 }
+                System.out.println("Finished getting organization.");
                 return new Organization(name,coordinates,annualTurnover,employeesCount,type,postalAddress);
             } catch (RuntimeException e)
             {
@@ -316,7 +358,7 @@ public class GettingOrganizations
 
         String[] organizationData = organizationDataLine.split(";");
 
-        String name = organizationData[0];
+        String name = organizationDataLine.split("\"")[1];
 
         String[] coordinatesLine = organizationData[1].split(",");
 
