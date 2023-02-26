@@ -27,6 +27,7 @@ public class Execute_script extends Command
             String[] lineWithCommand = commandLine.split(" ");
             int fileIndex = 1;
             String fileName = lineWithCommand[fileIndex];
+
             ArrayList<String> commands = new ArrayList<>();
 
             try
@@ -36,11 +37,11 @@ public class Execute_script extends Command
 
                 while((line = bufferedReader.readLine()) != null)
                 {
-                    if (line.toLowerCase().contains("execute_script"))
-                    {
-                        System.out.println("Cannot execute script from file, because it contains another script execution.");
-                        return;
-                    }
+//                    if (line.toLowerCase().contains("execute_script"))
+//                    {
+//                        System.out.println("Cannot execute script from file, because it contains another script execution.");
+//                        return;
+//                    }
                     commands.add(line);
                 }
 
@@ -66,9 +67,26 @@ public class Execute_script extends Command
         }
     }
 
+    private static ArrayList<String> amountOfExecutions = new ArrayList<>();
+
     @Override
     public void executeFromScript(String command, TreeMap<Integer, Organization> executedMap)
     {
-
+        if (checkForDataAfterCommand(command, "file name"))
+        {
+            String fileName = command.split(" ")[1];
+            if (amountOfExecutions.contains(fileName))
+            {
+                System.out.println("Program catch recursive. It will be skipped.");
+            } else
+            {
+                amountOfExecutions.add(fileName);
+                this.execute(command, executedMap);
+            }
+        }
+        else
+        {
+            System.out.println("There is a problem with " + this.getClass().getSimpleName() + " in script. No file name found.");
+        }
     }
 }

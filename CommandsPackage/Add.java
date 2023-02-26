@@ -1,9 +1,10 @@
 package CommandsPackage;
 
+import GetPackage.GetStringFromConsole;
 import GetPackage.GettingOrganizations;
 import OrganizationsPackage.*;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -36,10 +37,9 @@ public class Add extends Command
             int keyIndex = 1;
             int writedID = Integer.parseInt(commandLine[keyIndex]);
             System.out.println("ID is duplicated. You can change the organization with this ID or try another number. Do you want to change it? Type y for 'yes' or n for 'no'");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             try
             {
-                String changeOrNo = reader.readLine();
+                String changeOrNo = GetStringFromConsole.getNotNullString();
                 if (changeOrNo.toLowerCase().contains("y"))
                 {
                     Change change = new Change();
@@ -83,10 +83,9 @@ public class Add extends Command
             {
                 System.out.println("In command " + this.getClass().getSimpleName() + " catch duplicated ID. Replace element?" +
                         "Type y for 'yes' or n for 'no' \n ID:" + command.split(" ")[1]);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 try
                 {
-                    String changeOrNo = reader.readLine();
+                    String changeOrNo = GetStringFromConsole.getNotNullString();
                     if (changeOrNo.toLowerCase().contains("y"))
                     {
                         Change change = new Change();

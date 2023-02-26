@@ -49,10 +49,10 @@ public abstract class Command implements Execute
 
         for (int i = 0; i < executedMap.size(); i++)
         {
+            int getKey = entryArray[i].getKey();
             if (writedID == entryArray[i].getKey())
             {
                 isDuplicatedID = true;
-                break;
             }
         }
         if (isDuplicatedID)

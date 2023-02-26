@@ -1,8 +1,9 @@
 package CommandsPackage;
 
+import GetPackage.GetStringFromConsole;
 import OrganizationsPackage.*;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -52,19 +53,18 @@ public class Update extends Command
 
             System.out.println("What data do you want to change?");
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             String line;
 
             try
             {
-                line = reader.readLine();
+                line = GetStringFromConsole.getNotNullString();
                 try
                 {
                     switch (line.toLowerCase())
                     {
                         case "id":
                             System.out.println("Write new ID:");
-                            line = reader.readLine();
+                            line = GetStringFromConsole.getNotNullString();
                             int newID = Integer.parseInt(line);
                             boolean isUseID = false;
                             for (int i = 0; i < executedMap.size(); i++)
@@ -83,12 +83,12 @@ public class Update extends Command
                             break;
                         case "name":
                             System.out.println("Write new name:");
-                            line = reader.readLine();
+                            line = GetStringFromConsole.getNotNullString();
                             executedOrganization.setName(line);
                             break;
                         case "coordinates":
                             System.out.println("Write new coordinates:");
-                            line = reader.readLine();
+                            line = GetStringFromConsole.getNotNullString();
                             String[] parts = line.split(" ");
                             long x = Long.parseLong(parts[0]);
                             Double y = Double.parseDouble(parts[1]);
@@ -96,30 +96,30 @@ public class Update extends Command
                             break;
                         case "annual turnover", "annualturnover":
                             System.out.println("Write new annual turnover:");
-                            line = reader.readLine();
+                            line = GetStringFromConsole.getNotNullString();
                             long annualTurnover = Long.parseLong(line);
                             executedOrganization.setAnnualTurnover(annualTurnover);
                             break;
                         case "employees count", "employeescount":
                             System.out.println("Write new employees count:");
-                            line = reader.readLine();
+                            line = GetStringFromConsole.getNotNullString();
                             long employeesCount = Long.parseLong(line);
                             executedOrganization.setAnnualTurnover(employeesCount);
                             break;
                         case "type":
                             System.out.println("Write new type:");
-                            line = reader.readLine();
+                            line = GetStringFromConsole.getNotNullString();
                             executedOrganization.setType(OrganizationType.valueOf(line));
                             break;
                         case "postal address", "postaladdress":
                             System.out.println("\n zipcode:");
-                            String zipCode = reader.readLine();
+                            String zipCode = GetStringFromConsole.getNotNullString();
                             System.out.println("\n town:");
-                            String townForLocation = reader.readLine();
+                            String townForLocation = GetStringFromConsole.getNotNullString();
                             System.out.println("\n x of town (in int format):");
-                            int xForAddress = Integer.parseInt(reader.readLine());
+                            int xForAddress = Integer.parseInt(GetStringFromConsole.getNotNullString());
                             System.out.println("\n y of town (in float format):");
-                            float yForAddress = Float.parseFloat(reader.readLine());
+                            float yForAddress = Float.parseFloat(GetStringFromConsole.getNotNullString());
                             Location location = new Location(xForAddress, yForAddress, townForLocation);
                             Address postalAddress = new Address(zipCode,location);
                             executedOrganization.setPostalAddress(postalAddress);
@@ -190,7 +190,7 @@ public class Update extends Command
                         executedOrganization.setID(id);
                         break;
                     case "name":
-                        executedOrganization.setName(parts[dataIndex]);
+                        executedOrganization.setName(parts[dataIndex].replace("\"", ""));
                         break;
                     case "coordinates":
                         long x = Long.parseLong(parts[dataIndex]);

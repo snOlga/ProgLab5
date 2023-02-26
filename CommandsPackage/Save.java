@@ -26,8 +26,19 @@ public class Save extends Command
         try
         {
             GettingOrganizations list = new GettingOrganizations();
-            BufferedWriter writter = new BufferedWriter(new FileWriter("organizations2.csv"));
-
+            String fileName = "";
+            if (command.toLowerCase().contains("exit"))
+            {
+                fileName = GettingOrganizations.bufferedFileName;
+            }
+            else
+            {
+                fileName = "organizations2.csv";
+                PrintWriter writer = new PrintWriter(GettingOrganizations.bufferedFileName);
+                writer.print("");
+                writer.close();
+            }
+            BufferedWriter writter = new BufferedWriter(new FileWriter(fileName));
             String org = executedMap.toString();
 
 
@@ -75,8 +86,8 @@ public class Save extends Command
         if (organization.getType() != null && organization.getPostalAddress() != null)
         {
             return "\n" +
-                    organization.getID() + ";" +
-                    organization.getName() + ";" +
+                    organization.getID() + ";\"" +
+                    organization.getName() + "\";" +
                     this.getCoordinatesForSavingCSV(organization.getCoordinates()) + ";" +
                     organization.getCreationDate() + ";" +
                     organization.getAnnualTurnover() + ";" +
@@ -86,8 +97,8 @@ public class Save extends Command
         } else if (organization.getType() != null)
         {
             return "\n" +
-                    organization.getID() + ";" +
-                    organization.getName() + ";" +
+                    organization.getID() + ";\"" +
+                    organization.getName() + "\";" +
                     this.getCoordinatesForSavingCSV(organization.getCoordinates()) + ";" +
                     organization.getCreationDate() + ";" +
                     organization.getAnnualTurnover() + ";" +
@@ -96,8 +107,8 @@ public class Save extends Command
         }else if (organization.getPostalAddress() != null)
         {
             return "\n" +
-                    organization.getID() + ";" +
-                    organization.getName() + ";" +
+                    organization.getID() + ";\"" +
+                    organization.getName() + "\";" +
                     this.getCoordinatesForSavingCSV(organization.getCoordinates()) + ";" +
                     organization.getCreationDate() + ";" +
                     organization.getAnnualTurnover() + ";" +
@@ -107,8 +118,8 @@ public class Save extends Command
         else
         {
             return "\n" +
-                    organization.getID() + ";" +
-                    organization.getName() + ";" +
+                    organization.getID() + ";\"" +
+                    organization.getName() + "\";" +
                     this.getCoordinatesForSavingCSV(organization.getCoordinates()) + ";" +
                     organization.getCreationDate() + ";" +
                     organization.getAnnualTurnover() + ";" +
