@@ -265,20 +265,19 @@ public class GettingOrganizations implements GetStringFromConsole
         try
         {
             System.out.println("Please, write an organization: \n name:");
-            name = GetStringFromConsole.getNotNullString();
-            try
-            {
-                System.out.println("\n Coordinates: \n x(in long format):");
-                xForCoordinates = Long.parseLong(GetStringFromConsole.getNotNullString());
-                System.out.println("\n y(in double format):");
-                yForCoordinates = Double.parseDouble(GetStringFromConsole.getNotNullString());
+            name = getName();
+//            try
+//            {
+                System.out.println("\n Coordinates:");
+                xForCoordinates = getXForCoordinates();
+                yForCoordinates = getYForCoordinates();
                 coordinates = new Coordinates(xForCoordinates, yForCoordinates);
 //                System.out.println("\n creation date(in format yyyy-mm-ddT00:00:00+00:00[Time/Zone]):");
 //                creationDate = ZonedDateTime.parse(reader.readLine());
                 System.out.println("\n annual turnover(in long format):");
-                annualTurnover = Long.parseLong(GetStringFromConsole.getNotNullString());
+                annualTurnover = getAnnualTurnover();
                 System.out.println("\n employees count(in long format):");
-                employeesCount = Long.parseLong(GetStringFromConsole.getNotNullString());
+                employeesCount = getEmployeesCount();
                 System.out.println("\n does organization have type? (type 'y' for yes, 'n' for no)?");
                 String setTypes = GetStringFromConsole.getNotNullString();
                 if (setTypes.toLowerCase().contains("y"))
@@ -293,37 +292,28 @@ public class GettingOrganizations implements GetStringFromConsole
                         }
                     }
                     System.out.println("\n organization type:");
-                    String getType = GetStringFromConsole.getNotNullString();
-                    for (OrganizationType orgType : OrganizationType.values())
-                    {
-                        if (orgType.toString().equals(getType.toUpperCase()))
-                        {
-                            type = orgType;
-                        }
-                    }
+                    type = getOrganizationType();
+//                    for (OrganizationType orgType : OrganizationType.values())
+//                    {
+//                        if (orgType.toString().equals(getType.toUpperCase()))
+//                        {
+//                            type = orgType;
+//                        }
+//                    }
                 }
                 System.out.println("\n does organization have postal address? (type 'y' for yes, 'n' for no)?");
                 String setPostalAddress = GetStringFromConsole.getNotNullString();
                 if (setPostalAddress.toLowerCase().contains("y"))
                 {
-                    System.out.println("\n postal address. Zipcode:");
-                    zipCode = GetStringFromConsole.getNotNullString();
-                    System.out.println("\n town:");
-                    townForLocation = GetStringFromConsole.getNotNullString();
-                    System.out.println("\n x of town (in int format):");
-                    xForAddress = Integer.parseInt(GetStringFromConsole.getNotNullString());
-                    System.out.println("\n y of town (in float format):");
-                    yForAddress = Float.parseFloat(GetStringFromConsole.getNotNullString());
-                    Location location = new Location(xForAddress, yForAddress, townForLocation);
-                    postalAddress = new Address(zipCode,location);
+                    postalAddress = getPostalAddress();
                 }
                 System.out.println("Finished getting organization.");
                 return new Organization(name,coordinates,annualTurnover,employeesCount,type,postalAddress);
-            } catch (RuntimeException e)
-            {
-                System.out.println("Not right format.");
-                return null;
-            }
+//            } catch (RuntimeException e)
+//            {
+//                System.out.println("Not right format.");
+//                return null;
+//            }
         } catch (IOException e)
         {
             System.out.println(e);
@@ -400,5 +390,146 @@ public class GettingOrganizations implements GetStringFromConsole
         }
 
         return new Organization(name, coordinates, annualTurnover, employeesCount, type, postalAddress);
+    }
+
+    public static String getName()
+    {
+        try
+        {
+            return GetStringFromConsole.getNotNullString();
+        }
+        catch (IOException e)
+        {
+            System.out.println("\n Not right input. Try again");
+            String line = getName();
+            return line;
+        }
+    }
+
+    public static Coordinates getCoordinates()
+    {
+        System.out.println("\n Coordinates:");
+        long x = getXForCoordinates();
+        Double y = getYForCoordinates();
+        return new Coordinates(x,y);
+    }
+
+    public static long getXForCoordinates()
+    {
+        System.out.println("\n x(in long format):");
+        try
+        {
+            return Long.parseLong(GetStringFromConsole.getNotNullString());
+        }
+        catch (Exception e)
+        {
+            System.out.println("\n Not right input. Try again");
+            long line = getXForCoordinates();
+            return line;
+        }
+    }
+
+    public static Double getYForCoordinates()
+    {
+        System.out.println("\n y(in double format):");
+        try
+        {
+            return Double.parseDouble(GetStringFromConsole.getNotNullString());
+        }
+        catch (Exception e)
+        {
+            System.out.println("\n Not right input. Try again");
+            Double line = getYForCoordinates();
+            return line;
+        }
+    }
+
+    public static long getAnnualTurnover()
+    {
+        try
+        {
+            return Long.parseLong(GetStringFromConsole.getNotNullString());
+        }
+        catch (Exception e)
+        {
+            System.out.println("\n Not right input. Try again");
+            long line = getAnnualTurnover();
+            return line;
+        }
+    }
+
+    public static Long getEmployeesCount()
+    {
+        try
+        {
+            return Long.parseLong(GetStringFromConsole.getNotNullString());
+        }
+        catch (Exception e)
+        {
+            System.out.println("\n Not right input. Try again");
+            Long line = getEmployeesCount();
+            return line;
+        }
+    }
+
+    public static OrganizationType getOrganizationType()
+    {
+        try
+        {
+            return OrganizationType.valueOf(GetStringFromConsole.getNotNullString());
+        }
+        catch (IOException e)
+        {
+            System.out.println("\n Not right input. Try again");
+            OrganizationType line = getOrganizationType();
+            return line;
+        }
+    }
+
+    public static Address getPostalAddress()
+    {
+        System.out.println("\n Postal address. Zipcode:");
+        String zipCode = getName(); //postalAddress returns string
+        return new Address(zipCode,getLocation());
+    }
+
+    public static Location getLocation()
+    {
+
+        Integer x = getXForLocation();
+        float y = getYForLocation();
+        System.out.println("\n town:");
+        String name = getName();
+        return new Location(x,y,name);
+    }
+
+    public static Integer getXForLocation()
+    {
+        System.out.println("\n y of town (in float format):");
+        try
+        {
+            return Integer.parseInt(GetStringFromConsole.getNotNullString());
+        }
+        catch (Exception e)
+        {
+            System.out.println("\n Not right input. Try again");
+            Integer line = getXForLocation();
+            return line;
+        }
+    }
+
+    public static float getYForLocation()
+    {
+        System.out.println("\n x of town (in int format):");
+        try
+        {
+            return Float.parseFloat(GetStringFromConsole.getNotNullString());
+        }
+        catch (Exception e)
+        {
+            System.out.println("\n Not right input. Try again");
+            float line = getYForLocation();
+            return line;
+        }
     }
 }
