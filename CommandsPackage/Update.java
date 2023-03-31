@@ -1,6 +1,7 @@
 package CommandsPackage;
 
 import GetPackage.GetStringFromConsole;
+import GetPackage.GettingOrganizations;
 import OrganizationsPackage.*;
 
 
@@ -83,45 +84,31 @@ public class Update extends Command
                             break;
                         case "name":
                             System.out.println("Write new name:");
-                            line = GetStringFromConsole.getNotNullString();
+                            line = GettingOrganizations.getName();
                             executedOrganization.setName(line);
                             break;
                         case "coordinates":
                             System.out.println("Write new coordinates:");
-                            line = GetStringFromConsole.getNotNullString();
-                            String[] parts = line.split(" ");
-                            long x = Long.parseLong(parts[0]);
-                            Double y = Double.parseDouble(parts[1]);
-                            executedOrganization.setCoordinates(new Coordinates(x, y));
+                            Coordinates coordinates = GettingOrganizations.getCoordinates();
+                            executedOrganization.setCoordinates(coordinates);
                             break;
                         case "annual turnover", "annualturnover":
                             System.out.println("Write new annual turnover:");
-                            line = GetStringFromConsole.getNotNullString();
-                            long annualTurnover = Long.parseLong(line);
+                            long annualTurnover = GettingOrganizations.getAnnualTurnover();
                             executedOrganization.setAnnualTurnover(annualTurnover);
                             break;
                         case "employees count", "employeescount":
                             System.out.println("Write new employees count:");
-                            line = GetStringFromConsole.getNotNullString();
-                            long employeesCount = Long.parseLong(line);
+                            long employeesCount = GettingOrganizations.getAnnualTurnover();
                             executedOrganization.setAnnualTurnover(employeesCount);
                             break;
                         case "type":
                             System.out.println("Write new type:");
-                            line = GetStringFromConsole.getNotNullString();
-                            executedOrganization.setType(OrganizationType.valueOf(line));
+                            OrganizationType organizationType = GettingOrganizations.getOrganizationType();
+                            executedOrganization.setType(organizationType);
                             break;
                         case "postal address", "postaladdress":
-                            System.out.println("\n zipcode:");
-                            String zipCode = GetStringFromConsole.getNotNullString();
-                            System.out.println("\n town:");
-                            String townForLocation = GetStringFromConsole.getNotNullString();
-                            System.out.println("\n x of town (in int format):");
-                            int xForAddress = Integer.parseInt(GetStringFromConsole.getNotNullString());
-                            System.out.println("\n y of town (in float format):");
-                            float yForAddress = Float.parseFloat(GetStringFromConsole.getNotNullString());
-                            Location location = new Location(xForAddress, yForAddress, townForLocation);
-                            Address postalAddress = new Address(zipCode,location);
+                            Address postalAddress = GettingOrganizations.getPostalAddress();
                             executedOrganization.setPostalAddress(postalAddress);
                             break;
                         default:
