@@ -82,6 +82,7 @@ public class Execute_script extends Command
             {
                 amountOfExecutions.add(fileName);
                 this.execute(command, executedMap);
+                amountOfExecutions.remove(amountOfExecutions.size()-1);
             }
         }
         else
